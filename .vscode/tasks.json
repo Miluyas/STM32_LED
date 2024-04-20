@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",//linux下的make
+            "args": [
+              "-j"//该参数开启并行编译，即make -j可以查看make命令，执行build等效于make -j
+            ],
+            "group": "build",
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$gcc",//该参数指定编译报错的匹配类型，gun工具下使用gcc
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command":"make",
+            "args": [
+                "clean"//该参数即执行清除编译出的所有输出文件命令，一般在任务在需要完全编译时执行
+                //执行clean 等效执行make clean
+            ],
+            "group": "build"
+
+        }
+    ]
+}

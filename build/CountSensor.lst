@@ -1,0 +1,416 @@
+ARM GAS  /tmp/cce2COlt.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"CountSensor.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.CountSensor_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	CountSensor_Init
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	CountSensor_Init:
+  25              	.LFB65:
+  26              		.file 1 "Core/Src/CountSensor.c"
+   1:Core/Src/CountSensor.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/CountSensor.c **** /**
+   3:Core/Src/CountSensor.c ****   ******************************************************************************
+   4:Core/Src/CountSensor.c ****   * @file    CountSensor.c
+   5:Core/Src/CountSensor.c ****   * @brief   This file provides code for the configuration
+   6:Core/Src/CountSensor.c ****   *          of all used GPIO pins.
+   7:Core/Src/CountSensor.c ****   ******************************************************************************
+   8:Core/Src/CountSensor.c ****   * @attention
+   9:Core/Src/CountSensor.c ****   *
+  10:Core/Src/CountSensor.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:Core/Src/CountSensor.c ****   * All rights reserved.
+  12:Core/Src/CountSensor.c ****   *
+  13:Core/Src/CountSensor.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:Core/Src/CountSensor.c ****   * in the root directory of this software component.
+  15:Core/Src/CountSensor.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:Core/Src/CountSensor.c ****   *
+  17:Core/Src/CountSensor.c ****   ******************************************************************************
+  18:Core/Src/CountSensor.c ****   */
+  19:Core/Src/CountSensor.c **** /* USER CODE END Header */
+  20:Core/Src/CountSensor.c **** 
+  21:Core/Src/CountSensor.c **** /* Includes ------------------------------------------------------------------*/
+  22:Core/Src/CountSensor.c **** #include "CountSensor.h"
+  23:Core/Src/CountSensor.c **** #include "stm32f1xx_hal.h"
+  24:Core/Src/CountSensor.c **** #include "stm32f1xx_hal_gpio.h"
+  25:Core/Src/CountSensor.c **** #include "stm32f1xx_hal_exti.h"
+  26:Core/Src/CountSensor.c **** 
+  27:Core/Src/CountSensor.c **** /* USER CODE BEGIN 0 */
+  28:Core/Src/CountSensor.c **** 
+  29:Core/Src/CountSensor.c **** /*
+  30:Core/Src/CountSensor.c **** 全局变量计数给主函数获取*/
+  31:Core/Src/CountSensor.c **** uint16_t CountSensor_Count;
+  32:Core/Src/CountSensor.c **** 
+ARM GAS  /tmp/cce2COlt.s 			page 2
+
+
+  33:Core/Src/CountSensor.c **** /* USER CODE END 0 */
+  34:Core/Src/CountSensor.c **** 
+  35:Core/Src/CountSensor.c **** /*----------------------------------------------------------------------------*/
+  36:Core/Src/CountSensor.c **** /* Configure GPIO                                                             */
+  37:Core/Src/CountSensor.c **** /*----------------------------------------------------------------------------*/
+  38:Core/Src/CountSensor.c **** /* USER CODE BEGIN 1 */
+  39:Core/Src/CountSensor.c **** /*
+  40:Core/Src/CountSensor.c **** 适用于stm32f4xx系列，M4内核
+  41:Core/Src/CountSensor.c **** */
+  42:Core/Src/CountSensor.c **** // void HAL_GPIO_EXTI_Config(GPIO_TypeDef *GPIOx,uint16_t GPIO_Pin){
+  43:Core/Src/CountSensor.c **** //   assert_param(IS_GPIO_PIN(GPIO_Pin));
+  44:Core/Src/CountSensor.c **** 
+  45:Core/Src/CountSensor.c **** //   if (GPIO_Pin < GPIO_PIN_8)
+  46:Core/Src/CountSensor.c **** //   {
+  47:Core/Src/CountSensor.c **** //     /* Configure the SYSCFG EXTICR register to select the GPIO pin */
+  48:Core/Src/CountSensor.c **** //     SYSCFG->EXTICR[GPIO_Pin >> 2] &= ~(0x0F << (4 * (GPIO_Pin & 0x03)));
+  49:Core/Src/CountSensor.c **** //     SYSCFG->EXTICR[GPIO_Pin >> 2] |= (((uint32_t)(GPIO_GET_INDEX(GPIOx))) << (4 * (GPIO_Pin & 0x
+  50:Core/Src/CountSensor.c **** //   }
+  51:Core/Src/CountSensor.c **** //   else
+  52:Core/Src/CountSensor.c **** //   {
+  53:Core/Src/CountSensor.c **** //     /* Configure the SYSCFG EXTICR register to select the GPIO pin */
+  54:Core/Src/CountSensor.c **** //     SYSCFG->EXTICR[GPIO_Pin >> 2] &= ~(0x0F << (4 * ((GPIO_Pin >> 4) & 0x03)));
+  55:Core/Src/CountSensor.c **** //     SYSCFG->EXTICR[GPIO_Pin >> 2] |= (((uint32_t)(GPIO_GET_INDEX(GPIOx))) << (4 * ((GPIO_Pin >> 
+  56:Core/Src/CountSensor.c **** //   }
+  57:Core/Src/CountSensor.c **** // }
+  58:Core/Src/CountSensor.c **** 
+  59:Core/Src/CountSensor.c **** 
+  60:Core/Src/CountSensor.c **** /* USER CODE END 1 */
+  61:Core/Src/CountSensor.c **** 
+  62:Core/Src/CountSensor.c **** /** Configure pins as
+  63:Core/Src/CountSensor.c ****         * Analog
+  64:Core/Src/CountSensor.c ****         * Input
+  65:Core/Src/CountSensor.c ****         * Output
+  66:Core/Src/CountSensor.c ****         * EVENT_OUT
+  67:Core/Src/CountSensor.c ****         * EXTI
+  68:Core/Src/CountSensor.c **** */
+  69:Core/Src/CountSensor.c **** void CountSensor_Init(void)
+  70:Core/Src/CountSensor.c **** {
+  27              		.loc 1 70 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 24
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 00B5     		push	{lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 14, -4
+  35 0002 87B0     		sub	sp, sp, #28
+  36              	.LCFI1:
+  37              		.cfi_def_cfa_offset 32
+  71:Core/Src/CountSensor.c ****   
+  72:Core/Src/CountSensor.c **** 
+  73:Core/Src/CountSensor.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  38              		.loc 1 73 3 view .LVU1
+  39              		.loc 1 73 20 is_stmt 0 view .LVU2
+  40 0004 0023     		movs	r3, #0
+  41 0006 0293     		str	r3, [sp, #8]
+  42 0008 0393     		str	r3, [sp, #12]
+ARM GAS  /tmp/cce2COlt.s 			page 3
+
+
+  43 000a 0493     		str	r3, [sp, #16]
+  44 000c 0593     		str	r3, [sp, #20]
+  74:Core/Src/CountSensor.c **** 
+  75:Core/Src/CountSensor.c ****   /* GPIO Ports Clock Enable */
+  76:Core/Src/CountSensor.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  45              		.loc 1 76 3 is_stmt 1 view .LVU3
+  46              	.LBB2:
+  47              		.loc 1 76 3 view .LVU4
+  48              		.loc 1 76 3 view .LVU5
+  49 000e 03F18043 		add	r3, r3, #1073741824
+  50 0012 03F50433 		add	r3, r3, #135168
+  51 0016 9A69     		ldr	r2, [r3, #24]
+  52 0018 42F00802 		orr	r2, r2, #8
+  53 001c 9A61     		str	r2, [r3, #24]
+  54              		.loc 1 76 3 view .LVU6
+  55 001e 9B69     		ldr	r3, [r3, #24]
+  56 0020 03F00803 		and	r3, r3, #8
+  57 0024 0193     		str	r3, [sp, #4]
+  58              		.loc 1 76 3 view .LVU7
+  59 0026 019B     		ldr	r3, [sp, #4]
+  60              	.LBE2:
+  61              		.loc 1 76 3 view .LVU8
+  77:Core/Src/CountSensor.c **** 
+  78:Core/Src/CountSensor.c ****   /*Configure GPIO pin Output Level */
+  79:Core/Src/CountSensor.c **** 
+  80:Core/Src/CountSensor.c ****   
+  81:Core/Src/CountSensor.c **** 
+  82:Core/Src/CountSensor.c ****   /*Configure GPIO pin : PtPin */
+  83:Core/Src/CountSensor.c ****   /*
+  84:Core/Src/CountSensor.c ****   初始化红外传感器为外部中断模式*/
+  85:Core/Src/CountSensor.c ****   GPIO_InitStruct.Pin = COUNTSENSOR_Pin;
+  62              		.loc 1 85 3 view .LVU9
+  63              		.loc 1 85 23 is_stmt 0 view .LVU10
+  64 0028 4FF48043 		mov	r3, #16384
+  65 002c 0293     		str	r3, [sp, #8]
+  86:Core/Src/CountSensor.c ****   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  66              		.loc 1 86 3 is_stmt 1 view .LVU11
+  67              		.loc 1 86 24 is_stmt 0 view .LVU12
+  68 002e 094B     		ldr	r3, .L3
+  69 0030 0393     		str	r3, [sp, #12]
+  87:Core/Src/CountSensor.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  70              		.loc 1 87 3 is_stmt 1 view .LVU13
+  88:Core/Src/CountSensor.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  71              		.loc 1 88 3 view .LVU14
+  72              		.loc 1 88 25 is_stmt 0 view .LVU15
+  73 0032 0223     		movs	r3, #2
+  74 0034 0593     		str	r3, [sp, #20]
+  89:Core/Src/CountSensor.c ****   // HAL_GPIO_Init(LED0_GPIO_Port, &GPIO_InitStruct);
+  90:Core/Src/CountSensor.c ****   HAL_GPIO_Init(COUNTSENSOR_GPIO_Port, &GPIO_InitStruct);
+  75              		.loc 1 90 3 is_stmt 1 view .LVU16
+  76 0036 02A9     		add	r1, sp, #8
+  77 0038 0748     		ldr	r0, .L3+4
+  78 003a FFF7FEFF 		bl	HAL_GPIO_Init
+  79              	.LVL0:
+  91:Core/Src/CountSensor.c **** 
+  92:Core/Src/CountSensor.c ****   /*
+  93:Core/Src/CountSensor.c ****   配置EXTI中断与GPIO引脚映射
+ARM GAS  /tmp/cce2COlt.s 			page 4
+
+
+  94:Core/Src/CountSensor.c ****   */
+  95:Core/Src/CountSensor.c ****   // __HAL_GPIO_EXTI_GET_IT(COUNTSENSOR_Pin);
+  96:Core/Src/CountSensor.c ****   HAL_NVIC_SetPriority(EXTI15_10_IRQn,1,1);
+  80              		.loc 1 96 3 view .LVU17
+  81 003e 0122     		movs	r2, #1
+  82 0040 1146     		mov	r1, r2
+  83 0042 2820     		movs	r0, #40
+  84 0044 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+  85              	.LVL1:
+  97:Core/Src/CountSensor.c ****   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  86              		.loc 1 97 3 view .LVU18
+  87 0048 2820     		movs	r0, #40
+  88 004a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+  89              	.LVL2:
+  98:Core/Src/CountSensor.c **** 
+  99:Core/Src/CountSensor.c ****   /*
+ 100:Core/Src/CountSensor.c ****   我忘了启动中断监听
+ 101:Core/Src/CountSensor.c **** 
+ 102:Core/Src/CountSensor.c **** //   */
+ 103:Core/Src/CountSensor.c **** //  HAL_GPIO_EXTI_IRQHandler(COUNTSENSOR_Pin);
+ 104:Core/Src/CountSensor.c **** 
+ 105:Core/Src/CountSensor.c **** 
+ 106:Core/Src/CountSensor.c **** 
+ 107:Core/Src/CountSensor.c **** 
+ 108:Core/Src/CountSensor.c **** 
+ 109:Core/Src/CountSensor.c **** 
+ 110:Core/Src/CountSensor.c **** }
+  90              		.loc 1 110 1 is_stmt 0 view .LVU19
+  91 004e 07B0     		add	sp, sp, #28
+  92              	.LCFI2:
+  93              		.cfi_def_cfa_offset 4
+  94              		@ sp needed
+  95 0050 5DF804FB 		ldr	pc, [sp], #4
+  96              	.L4:
+  97              		.align	2
+  98              	.L3:
+  99 0054 00001110 		.word	269549568
+ 100 0058 000C0140 		.word	1073810432
+ 101              		.cfi_endproc
+ 102              	.LFE65:
+ 104              		.section	.text.EXTI15_10_IRQHandler,"ax",%progbits
+ 105              		.align	1
+ 106              		.global	EXTI15_10_IRQHandler
+ 107              		.syntax unified
+ 108              		.thumb
+ 109              		.thumb_func
+ 110              		.fpu softvfp
+ 112              	EXTI15_10_IRQHandler:
+ 113              	.LFB66:
+ 111:Core/Src/CountSensor.c **** 
+ 112:Core/Src/CountSensor.c **** /* USER CODE BEGIN 2 */
+ 113:Core/Src/CountSensor.c ****   /*
+ 114:Core/Src/CountSensor.c ****   注册EXTI中断回调函数*/
+ 115:Core/Src/CountSensor.c **** // void EXTI15_10_IRQn_Handler(uint16_t GPIO_Pin)
+ 116:Core/Src/CountSensor.c **** // {
+ 117:Core/Src/CountSensor.c **** //   if(GPIO_Pin ==COUNTSENSOR_Pin){
+ 118:Core/Src/CountSensor.c **** //     CountSensor_Count++;
+ARM GAS  /tmp/cce2COlt.s 			page 5
+
+
+ 119:Core/Src/CountSensor.c **** //   }
+ 120:Core/Src/CountSensor.c **** // }
+ 121:Core/Src/CountSensor.c **** 
+ 122:Core/Src/CountSensor.c **** void EXTI15_10_IRQHandler(void) {
+ 114              		.loc 1 122 33 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118 0000 08B5     		push	{r3, lr}
+ 119              	.LCFI3:
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 3, -8
+ 122              		.cfi_offset 14, -4
+ 123:Core/Src/CountSensor.c ****     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
+ 123              		.loc 1 123 5 view .LVU21
+ 124 0002 4FF48040 		mov	r0, #16384
+ 125 0006 FFF7FEFF 		bl	HAL_GPIO_EXTI_IRQHandler
+ 126              	.LVL3:
+ 124:Core/Src/CountSensor.c **** }
+ 127              		.loc 1 124 1 is_stmt 0 view .LVU22
+ 128 000a 08BD     		pop	{r3, pc}
+ 129              		.cfi_endproc
+ 130              	.LFE66:
+ 132              		.section	.text.HAL_GPIO_EXTI_Callback,"ax",%progbits
+ 133              		.align	1
+ 134              		.global	HAL_GPIO_EXTI_Callback
+ 135              		.syntax unified
+ 136              		.thumb
+ 137              		.thumb_func
+ 138              		.fpu softvfp
+ 140              	HAL_GPIO_EXTI_Callback:
+ 141              	.LVL4:
+ 142              	.LFB67:
+ 125:Core/Src/CountSensor.c **** 
+ 126:Core/Src/CountSensor.c **** void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+ 143              		.loc 1 126 47 is_stmt 1 view -0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127:Core/Src/CountSensor.c ****   if (GPIO_Pin==COUNTSENSOR_Pin)
+ 147              		.loc 1 127 3 view .LVU24
+ 148              		.loc 1 127 6 is_stmt 0 view .LVU25
+ 149 0000 B0F5804F 		cmp	r0, #16384
+ 150 0004 00D0     		beq	.L13
+ 151 0006 7047     		bx	lr
+ 152              	.L13:
+ 126:Core/Src/CountSensor.c ****   if (GPIO_Pin==COUNTSENSOR_Pin)
+ 153              		.loc 1 126 47 view .LVU26
+ 154 0008 08B5     		push	{r3, lr}
+ 155              	.LCFI4:
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 3, -8
+ 158              		.cfi_offset 14, -4
+ 159              	.LBB3:
+ 128:Core/Src/CountSensor.c ****   {
+ 129:Core/Src/CountSensor.c ****     /* code */
+ 130:Core/Src/CountSensor.c ****     /*不得不说再次判断引脚电平很重要，处理数据乱跳情况,这个位置选的�
+ARM GAS  /tmp/cce2COlt.s 			page 6
+
+
+ 131:Core/Src/CountSensor.c ****     /*这个真的是非常天才且精确，在写这些东西时，要注意状态的变化，将
+ 132:Core/Src/CountSensor.c ****     /*如果为上升沿触发，这里改为判断1即可*/
+ 133:Core/Src/CountSensor.c ****     /*实际上这里遮住光为高电平，所以改为0,上升沿*/
+ 134:Core/Src/CountSensor.c ****       GPIO_PinState bitstatus=GPIO_PIN_RESET;
+ 160              		.loc 1 134 7 is_stmt 1 view .LVU27
+ 161              	.LVL5:
+ 135:Core/Src/CountSensor.c **** 
+ 136:Core/Src/CountSensor.c **** 
+ 137:Core/Src/CountSensor.c ****     if(HAL_GPIO_ReadPin(COUNTSENSOR_GPIO_Port,COUNTSENSOR_Pin) == bitstatus){
+ 162              		.loc 1 137 5 view .LVU28
+ 163              		.loc 1 137 8 is_stmt 0 view .LVU29
+ 164 000a 4FF48041 		mov	r1, #16384
+ 165 000e 0448     		ldr	r0, .L14
+ 166              	.LVL6:
+ 167              		.loc 1 137 8 view .LVU30
+ 168 0010 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 169              	.LVL7:
+ 170              		.loc 1 137 7 view .LVU31
+ 171 0014 18B9     		cbnz	r0, .L7
+ 138:Core/Src/CountSensor.c ****     CountSensor_Count++;
+ 172              		.loc 1 138 5 is_stmt 1 view .LVU32
+ 173              		.loc 1 138 22 is_stmt 0 view .LVU33
+ 174 0016 034A     		ldr	r2, .L14+4
+ 175 0018 1388     		ldrh	r3, [r2]
+ 176 001a 0133     		adds	r3, r3, #1
+ 177 001c 1380     		strh	r3, [r2]	@ movhi
+ 178              	.L7:
+ 179              	.LBE3:
+ 139:Core/Src/CountSensor.c ****     }
+ 140:Core/Src/CountSensor.c ****   }
+ 141:Core/Src/CountSensor.c ****   
+ 142:Core/Src/CountSensor.c **** }
+ 180              		.loc 1 142 1 view .LVU34
+ 181 001e 08BD     		pop	{r3, pc}
+ 182              	.L15:
+ 183              		.align	2
+ 184              	.L14:
+ 185 0020 000C0140 		.word	1073810432
+ 186 0024 00000000 		.word	.LANCHOR0
+ 187              		.cfi_endproc
+ 188              	.LFE67:
+ 190              		.section	.text.CountSensor_Get,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	CountSensor_Get
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 196              		.fpu softvfp
+ 198              	CountSensor_Get:
+ 199              	.LFB68:
+ 143:Core/Src/CountSensor.c **** /*
+ 144:Core/Src/CountSensor.c **** 
+ 145:Core/Src/CountSensor.c **** *获取传感计数器计数值
+ 146:Core/Src/CountSensor.c **** */
+ 147:Core/Src/CountSensor.c **** uint16_t CountSensor_Get(void){
+ 200              		.loc 1 147 31 is_stmt 1 view -0
+ 201              		.cfi_startproc
+ARM GAS  /tmp/cce2COlt.s 			page 7
+
+
+ 202              		@ args = 0, pretend = 0, frame = 0
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 204              		@ link register save eliminated.
+ 148:Core/Src/CountSensor.c ****   return CountSensor_Count;
+ 205              		.loc 1 148 3 view .LVU36
+ 149:Core/Src/CountSensor.c **** }
+ 206              		.loc 1 149 1 is_stmt 0 view .LVU37
+ 207 0000 014B     		ldr	r3, .L17
+ 208 0002 1888     		ldrh	r0, [r3]
+ 209 0004 7047     		bx	lr
+ 210              	.L18:
+ 211 0006 00BF     		.align	2
+ 212              	.L17:
+ 213 0008 00000000 		.word	.LANCHOR0
+ 214              		.cfi_endproc
+ 215              	.LFE68:
+ 217              		.global	CountSensor_Count
+ 218              		.section	.bss.CountSensor_Count,"aw",%nobits
+ 219              		.align	1
+ 220              		.set	.LANCHOR0,. + 0
+ 223              	CountSensor_Count:
+ 224 0000 0000     		.space	2
+ 225              		.text
+ 226              	.Letext0:
+ 227              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 228              		.file 3 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 229              		.file 4 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 230              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ARM GAS  /tmp/cce2COlt.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 CountSensor.c
+     /tmp/cce2COlt.s:16     .text.CountSensor_Init:0000000000000000 $t
+     /tmp/cce2COlt.s:24     .text.CountSensor_Init:0000000000000000 CountSensor_Init
+     /tmp/cce2COlt.s:99     .text.CountSensor_Init:0000000000000054 $d
+     /tmp/cce2COlt.s:105    .text.EXTI15_10_IRQHandler:0000000000000000 $t
+     /tmp/cce2COlt.s:112    .text.EXTI15_10_IRQHandler:0000000000000000 EXTI15_10_IRQHandler
+     /tmp/cce2COlt.s:133    .text.HAL_GPIO_EXTI_Callback:0000000000000000 $t
+     /tmp/cce2COlt.s:140    .text.HAL_GPIO_EXTI_Callback:0000000000000000 HAL_GPIO_EXTI_Callback
+     /tmp/cce2COlt.s:185    .text.HAL_GPIO_EXTI_Callback:0000000000000020 $d
+     /tmp/cce2COlt.s:191    .text.CountSensor_Get:0000000000000000 $t
+     /tmp/cce2COlt.s:198    .text.CountSensor_Get:0000000000000000 CountSensor_Get
+     /tmp/cce2COlt.s:213    .text.CountSensor_Get:0000000000000008 $d
+     /tmp/cce2COlt.s:223    .bss.CountSensor_Count:0000000000000000 CountSensor_Count
+     /tmp/cce2COlt.s:219    .bss.CountSensor_Count:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_GPIO_EXTI_IRQHandler
+HAL_GPIO_ReadPin

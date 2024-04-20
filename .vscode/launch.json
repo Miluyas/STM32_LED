@@ -1,0 +1,43 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [{
+
+        //名称自定义
+        "name":"Cortex Debug",
+        "type":"cortex-debug",
+        "request":"launch",
+        //填写需要调试目标的实际路径
+        "executable":"${workspaceRoot}/build/${workspaceFolderBasename}.elf",
+        //工程目录
+        "cwd":"${workspaceRoot}",
+        //芯片名称
+        "device":"STM32F103C8Tx",
+        //SVD文件描述目标芯片，等于数据化芯片手册
+        //借助SVD文件，调试可以查询寄存器状态
+        "svdFile":"${workspaceRoot}/STM32F103.svd",
+        //本例选择openocd作为调试服务器，也可选择jlink,stlink
+        "servertype": "openocd",
+        "configFiles": [
+            //选择openocd接口配置文件，在linux下找openocd路径，which openocd
+            "interface/stlink-v2-1.cfg",
+            "target/stm32f1x.cfg"
+        ],
+        //配置调试前要执行的任务，通常调试器执行编译操作
+        "preLaunchTask": "build",
+        
+        //编译器所在路径
+        // "armToolchainPath": "/usr/bin/gdb-multiarch",
+        "gdbPath": "/usr/bin/gdb-multiarch",
+        "liveWatch": {
+            "enabled": true,
+            "samplesPerSecond": 4
+        }
+
+
+    }
+    ],
+
+}
