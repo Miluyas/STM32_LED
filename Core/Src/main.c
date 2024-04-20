@@ -105,9 +105,10 @@ int main(void)
   
   
   //确实显示不好入死循环
+  //实际上和好不好进入while(1)循环无关，只关系到刷新问题
 
   //LED显示
-  OLED_ShowString(1,1,"hello6");
+  OLED_ShowString(1,1,"Count:");
   // OLED_ShowString(1,3,"HELLO WORLD!");//一行三列开始显示
   // OLED_ShowNum(2,1,12345,5);
   // OLED_ShowSignedNum(2,7,-66,2);//2行7列显示十进制-66，长度为2
